@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ wallpaper.title }} || AutoVista{% endblock %}
+
+{% block style %}
+<style>
+    /* Base styling for the page */
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #111111;
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Wallpaper container styling */
+    .wallpaper-container {
+        position: relative;
+        padding: 50px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Grid background effects */
+    .lines {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        margin: auto;
+        width: 100vw;
+        z-index: 1;
+        background: 
+            linear-gradient(90deg, rgba(255, 0, 0, 0.15) 1px, transparent 1px) 0 0,
+            linear-gradient(180deg, rgba(255, 0, 0, 0.15) 1px, transparent 1px) 0 0;
+        background-size: 30px 30px;
+        transform: perspective(500px) rotateX(60deg);
+    }
+
+    .glowing-lines {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.22) 0%, transparent 60%);
+        animation: glow 4s infinite alternate;
+    }
+
+    /* Glow animation */
+    @keyframes glow {
+        0% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+
+    /* Header actions styling */
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        background-color: rgba(255, 0, 0, 0.1);
+        padding: 10px 20px;
+        border-radius: 10px;
+    }
+
+    .back-btn, .download-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background: rgba(255, 0, 0, 0.1);
+        color: #ff3333;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+    }
+
+    .back-btn:hover, .download-btn:hover {
+        background: rgba(255, 0, 0, 0.2);
+    }
+
+    .downloads {
+        font-size: 1.2em;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Wallpaper header layout */
+    .wallpaper-header {
+        flex-direction: row;
+        gap: 30px;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
+
+    .wallpaper-image-container {
+        max-width: 100%;
+        justify-content: left;
+    }
+
+    .wallpaper-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 15px;
+    }
+
+    .wallpaper-details {
+        max-width: 100%;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.5;
+    }
+
+    .wallpaper-details h1 {
+        font-size: 2rem;
+        color: #ff3333;
+        margin-bottom: 20px;
+    }
+
+    /* Red dividing line */
+    .divider {
+        width: 100%;
+        height: 2px;
+        background: #ff3333;
+        margin: 30px 0;
+    }
+
+    /* Related wallpapers section */
+    .related-wallpapers {
+        margin-top: 30px;
+    }
+
+    .related-wallpapers h2 {
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    .wallpaper-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .wallpaper-card {
+        flex: 1 1 calc(33.333% - 10px);
+        max-width: calc(33.333% - 10px);
+        background-color: #222;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .wallpaper-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .wallpaper-card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .wallpaper-card .wallpaper-info {
+        padding: 10px;
+    }
+
+    .wallpaper-card .wallpaper-title {
+        font-size: 1.2em;
+        color: #ff3333;
+        margin: 5px 0;
+    }
+
+    .wallpaper-card .wallpaper-meta {
+        font-size: 0.9em;
+        color: rgba(255, 255, 255, 0.6);
+    }
+</style>
+{% endblock style %}
+
+{% block body %}
+<div class="lines"></div>
+<div class="glowing-lines"></div>
+
+<div class="wallpaper-container">
+    <!-- Header Actions -->
+    <div class="header-actions">
+        <a href="{% url 'wallpaper_list' %}" class="back-btn">← Back</a>
+        <span class="downloads">Downloads: {{ wallpaper.downloads }}</span>
+        <a href="{% url 'increment_download' wallpaper.id %}" class="download-btn">Download Wallpaper</a>     
+    </div>
+
+    <!-- Wallpaper Image and Details -->
+    <div class="wallpaper-header">
+        <div class="wallpaper-image-container">
+            <img src="{{ image_url }}" alt="{{ wallpaper.title }}" class="wallpaper-image">
+        </div>
+        <div class="wallpaper-details">
+            <h1 class="wallpaper-title"><u>{{ wallpaper.title }}</u></h1>
+            <p>{{ wallpaper.description }}</p>
+            <p class="wallpaper-meta">Resolution: {{ wallpaper.resolution }}</p>
+            <p class="wallpaper-meta">Category: {{ wallpaper.category.name }}</p>
+            <p class="wallpaper-meta">Subcategory: {{ wallpaper.sub_category.name }}</p>
+        </div>
+    </div>
+
+    <!-- Red Dividing Line -->
+    <div class="divider"></div>
+
+    <!-- Related Wallpapers -->
+    {% if related_wallpapers %}
+    <div class="related-wallpapers">
+        <h2>Related Wallpapers</h2>
+        <div class="wallpaper-grid">
+            {% for related in related_wallpapers %}
+            <div class="wallpaper-card">
+                <a href="{% url 'wallpaper_detail' related.id %}">
+                    <img src="{{ related.image.url }}" alt="{{ related.title }}">
+                    <div class="wallpaper-info">
+                        <h2 class="wallpaper-title">{{ related.title }}</h2>
+                        <p class="wallpaper-meta">{{ related.resolution }} • {{ related.downloads }} downloads</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock body %}

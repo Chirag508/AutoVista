@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block title %} Blogs || AutoVista {% endblock title %}
+
+{% block style %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111111;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .blog-container {
+            position: relative;
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 2;
+        }
+
+        .lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            margin: auto;
+            width: 100vw;
+            z-index: 1;
+            background: 
+                linear-gradient(90deg, #ff000015 1px, transparent 1px) 0 0,
+                linear-gradient(180deg, #ff000015 1px, transparent 1px) 0 0;
+            background-size: 30px 30px;
+            transform: perspective(500px) rotateX(60deg);
+        }
+
+        .glowing-lines {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #ff000022 0%, transparent 60%);
+            animation: glow 4s infinite alternate;
+        }
+
+        .blog-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .blog-header h1 {
+            font-size: 3.5em;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(45deg, #ff0000, #ff6b6b, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 20px rgba(255, 0, 0, 0.5);
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .blog-card {
+            background: rgba(255, 0, 0, 0.05);
+            border: 1px solid rgba(255, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.1);
+        }
+
+        .blog-content {
+            padding: 20px;
+        }
+
+        .blog-title {
+            font-size: 1.5em;
+            margin: 0 0 10px;
+            color: #ff3333;
+        }
+
+        .blog-meta {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .blog-excerpt {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(45deg, #ff0000, #ff6b6b);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+        }
+
+        .read-more:hover {
+            transform: scale(1.05);
+        }
+
+        .blog-categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .category-tag {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff6b6b;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 50px;
+        }
+
+        .page-link {
+            padding: 8px 16px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            color: #ff3333;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .page-link:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .page-link.active {
+            background: #ff3333;
+            color: white;
+        }
+
+        @keyframes titleGlow {
+            0% { 
+                filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            }
+            100% { 
+                filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8));
+            }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .blog-header h1 {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+{% endblock style %}
+
+{% block body %}
+    <div class="lines"></div>
+    <div class="glowing-lines"></div>
+    <div class="blog-container">
+        <div class="blog-header">
+            <h1>Automotive Blog</h1>
+        </div>
+
+        <div class="blog-grid">
+            {% for blog in blogs %}
+            <article class="blog-card">
+                <img src="{{ blog.secure_image_url }}" alt="{{ blog.title }}" class="blog-image">
+                <div class="blog-content">
+                    
+                    <h2 class="blog-title">{{ blog.title }}</h2>
+                    <div class="blog-meta">
+                        <span><i class="far fa-user"></i> {{ blog.author }}</span>
+                        <span><i class="far fa-calendar"></i> {{ blog.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <a href="{% url 'blog_detail' blog.slug %}" class="read-more">Read More</a>
+                </div>
+            </article>
+            {% empty %}
+            <div class="no-blogs">
+                <p>No blog posts available yet....</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if blogs.has_other_pages %}
+        <div class="pagination">
+            {% if blogs.has_previous %}
+            <a href="?page={{ blogs.previous_page_number }}" class="page-link">&laquo;</a>
+            {% endif %}
+
+            {% for num in blogs.paginator.page_range %}
+                {% if blogs.number == num %}
+                <a class="page-link active" href="?page={{ num }}">{{ num }}</a>
+                {% else %}
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if blogs.has_next %}
+            <a href="?page={{ blogs.next_page_number }}" class="page-link">&raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock body %}

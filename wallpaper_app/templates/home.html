@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %} Home || AutoVista{% endblock title %}
+{% block style %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111111;  /* Darker background */
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            margin: auto;
+            width: 100vw;
+            z-index: 1;
+            background: 
+                linear-gradient(90deg, #ff000015 1px, transparent 1px) 0 0,
+                linear-gradient(180deg, #ff000015 1px, transparent 1px) 0 0;
+            background-size: 30px 30px;
+            transform: perspective(500px) rotateX(60deg);
+        }
+
+        .glowing-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #ff000022 0%, transparent 60%);
+            animation: glow 4s infinite alternate;
+        }
+
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 4.5em;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(45deg, #ff0000, #ff6b6b, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 20px rgba(255, 0, 0, 0.5);
+            animation: titleGlow 3s infinite alternate;
+            font-weight: 800;
+            position: relative;
+        }
+
+        h1::before {
+            content: 'WELCOME TO';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.2em;
+            letter-spacing: 15px;
+            color: #ff3333;
+            text-shadow: 0 0 10px #ff3333;
+            opacity: 0.8;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+            animation: lineWidth 2s infinite alternate;
+        }
+
+        .subtitle {
+            color: #ff3333;
+            font-size: 1.2em;
+            letter-spacing: 4px;
+            margin-top: 20px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            max-width: 600px;
+            text-align: center;
+            color:rgba(246, 19, 19, 0.763);
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #ff0000, #ff6b6b);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes titleGlow {
+            0% { 
+                filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            }
+            100% { 
+                filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8));
+            }
+        }
+
+        @keyframes lineWidth {
+            0% { width: 150px; }
+            100% { width: 300px; }
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+{% endblock style %}
+
+{% block body %}
+    <div class="lines"></div>
+    <div class="glowing-lines"></div>
+    <div class="container">
+        <div class="title-container">
+            <h1>AutoVista</h1>
+            <div class="subtitle">Premium Automotive Wallpapers</div>
+        </div>
+        <p><small> Explore our exclusive collection of high-resolution automotive wallpapers. From classic cars to modern supercars, discover stunning images that capture the essence of automotive excellence.</small></p>
+    </div>
+{% endblock body %}

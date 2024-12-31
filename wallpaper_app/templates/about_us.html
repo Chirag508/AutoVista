@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block title %} About Us || AutoVista {% endblock title %}
+
+{% block style %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111111;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .about-container {
+            position: relative;
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 2;
+        }
+
+        .lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            margin: auto;
+            width: 100vw;
+            z-index: 1;
+            background: 
+                linear-gradient(90deg, #ff000015 1px, transparent 1px) 0 0,
+                linear-gradient(180deg, #ff000015 1px, transparent 1px) 0 0;
+            background-size: 30px 30px;
+            transform: perspective(500px) rotateX(60deg);
+        }
+
+        .glowing-lines {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #ff000022 0%, transparent 60%);
+            animation: glow 4s infinite alternate;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .about-header h1 {
+            font-size: 3.5em;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(45deg, #ff0000, #ff6b6b, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 20px rgba(255, 0, 0, 0.5);
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .about-section {
+            background: rgba(255, 0, 0, 0.05);
+            border: 1px solid rgba(255, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            transition: transform 0.3s ease;
+        }
+
+        .about-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .about-section h2 {
+            color: #ff3333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .about-section p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            color: #ff3333;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes titleGlow {
+            0% { 
+                filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            }
+            100% { 
+                filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8));
+            }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+{% endblock style %}
+
+{% block body %}
+    <div class="lines"></div>
+    <div class="glowing-lines"></div>
+    <div class="about-container">
+        <div class="about-header">
+            <h1>About AutoVista</h1>
+        </div>
+
+        <div class="about-content">
+            <div class="about-section">
+                <h2>Our Mission</h2>
+                <p>AutoVista is dedicated to curating the finest collection of automotive wallpapers, celebrating the artistry and engineering excellence of automobiles. We strive to provide enthusiasts with stunning, high-quality images that capture the essence of automotive beauty.</p>
+            </div>
+
+            <div class="about-section">
+                <h2>Our Collection</h2>
+                <p>From classic vintage cars to modern supercars, our carefully curated collection features high-resolution images that showcase the most extraordinary vehicles ever created. Each wallpaper is selected to ensure the highest quality and visual impact.</p>
+            </div>
+
+            <div class="about-section">
+                <h2>For Enthusiasts</h2>
+                <p>Created by car enthusiasts for car enthusiasts, AutoVista understands the passion that drives our community. We regularly update our collection to bring you the latest and most exciting automotive imagery from around the world.</p>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Wallpapers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Car Brands</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4K</div>
+                <div class="stat-label">Resolution</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Happy Users</div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

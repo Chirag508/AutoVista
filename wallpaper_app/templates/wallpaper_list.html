@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wallpapers || AutoVista{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #111111;
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    .wallpaper-container {
+        position: relative;
+        padding: 50px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        z-index: 2;
+    }
+
+    .lines {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        margin: auto;
+        width: 100vw;
+        z-index: 1;
+        background: 
+            linear-gradient(90deg, #ff000015 1px, transparent 1px) 0 0,
+            linear-gradient(180deg, #ff000015 1px, transparent 1px) 0 0;
+        background-size: 30px 30px;
+        transform: perspective(500px) rotateX(60deg);
+    }
+
+    .glowing-lines {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 50%, #ff000022 0%, transparent 60%);
+        animation: glow 4s infinite alternate;
+    }
+
+    .wallpaper-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .wallpaper-header h1 {
+        font-size: 3.5em;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 8px;
+        background: linear-gradient(45deg, #ff0000, #ff6b6b, #ffffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 2px 2px 20px rgba(255, 0, 0, 0.5);
+        animation: titleGlow 3s infinite alternate;
+    }
+
+    .category-filter {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 30px;
+        padding: 10px;
+    }
+
+    .category-filter .btn {
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: rgba(255, 0, 0, 0.1);
+        color: #ff3333;
+        text-decoration: none;
+        transition: background 0.3s ease;
+    }
+
+    .category-filter .btn.active, .category-filter .btn:hover {
+        background: rgba(255, 0, 0, 0.2);
+    }
+
+    .wallpaper-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .wallpaper-card {
+        background: rgba(255, 0, 0, 0.05);
+        border: 1px solid rgba(255, 0, 0, 0.1);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .wallpaper-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
+    }
+
+    .wallpaper-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255, 0, 0, 0.1);
+    }
+
+    .wallpaper-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .wallpaper-title {
+        font-size: 1.2em;
+        margin: 0 0 5px;
+        color: #ff3333;
+    }
+
+    .wallpaper-meta {
+        font-size: 0.9em;        
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .wallpaper-card a {
+        text-decoration: none;
+    }
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .page-link {
+        padding: 8px 16px;
+        background: rgba(255, 0, 0, 0.1);
+        border: 1px solid rgba(255, 0, 0, 0.2);
+        color: #ff3333;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .page-link:hover {
+        background: rgba(255, 0, 0, 0.2);
+    }
+
+    .page-link.active {
+        background: #ff3333;
+        color: white;
+    }
+
+    @keyframes titleGlow {
+        0% { 
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+        }
+        100% { 
+            filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8));
+        }
+    }
+
+    @keyframes glow {
+        0% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+</style>
+{% endblock style %}
+
+{% block body %}
+<div class="lines"></div>
+<div class="glowing-lines"></div>
+<div class="wallpaper-container">
+    <div class="wallpaper-header">
+        <h1>Wallpapers</h1>
+    </div>
+
+    <div class="category-filter">
+        <a href="{% url 'wallpaper_list' %}" class="btn">All</a>
+        {% for category in categories %}
+            <a href="?category={{ category.slug }}" class="btn {% if category.slug == current_category %}active{% endif %}">{{ category.name }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="wallpaper-grid">
+        {% for wallpaper in page_obj %}
+            <div class="wallpaper-card">
+                <a href="{% url 'wallpaper_detail' wallpaper.id %}">
+                    <img src="{{ wallpaper.secure_image_url }}" alt="{{ wallpaper.title }}" class="wallpaper-image">
+                    <div class="wallpaper-info">
+                        <h2 class="wallpaper-title">{{ wallpaper.title }}</h2>
+                        <p class="wallpaper-meta">{{ wallpaper.resolution }} • {{ wallpaper.downloads }} downloads</p>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <p style="text-align: center; color: rgba(255, 255, 255, 0.6); font-size: 1.1em;">No wallpapers found.</p>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo;</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="page-link active" href="?page={{ num }}">{{ num }}</a>
+            {% else %}
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link">&raquo;</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock body %}
